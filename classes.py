@@ -52,10 +52,8 @@ class Enemy(object):
         self.x += speed_x
         self.y += speed_y
 
-class Spike(object):
+class Obstacles(object):
     #barriers for players, will kill players if they hit
-
-    spike = pygame.image.load("spike.png")
 
     def __init__(self,x, y, width, height):
         self.x = x
@@ -63,10 +61,29 @@ class Spike(object):
         self.width = width
         self.height = height
 
-    def draw(self, win):
-        self.hitbox = (self.x + 10, self.y - 20, 30, 40)
+    def collide(self, rect):
+        if rect[0] + rect[2] > self.hitbox[0] and rect[0] < self.hitbox[0] + self.hitbox[2]:
+            if rect[1] < self.hitbox[3]:
+                return True
+        return False
 
-class projectile(object):
+class Spike(Obstacles):
+
+    spike = pygame.image.load("spike.png")
+
+    def draw(self,win):
+        self.hitbox = (self.x + 10, self.y - 20, 30)
+
+    def collide(self, rect):
+        if rect[0] + rect[2] > self.hitbox[0] and rect[0] < self.hitbox[0] + self.hitbox[2]:
+            if rect[1] < self.hitbox[3]:
+                return True
+        return False
+
+
+
+
+class Projectile(object):
     
     def __init__(self, x, y, radius, color, facing):
         self.x = x
@@ -77,8 +94,6 @@ class projectile(object):
         self.vel = 10 * facing
 
     def draw(self, win):
+        pygame.draw.circle(win, self.color, (self.x,self.y), self.radius)
 
     
-    
-
-
