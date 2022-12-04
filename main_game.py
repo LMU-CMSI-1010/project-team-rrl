@@ -20,15 +20,24 @@ pygame.display.set_caption('shooter!')
 clock = pygame.time.Clock()
 
 # loading image onto surface object
-impstart = pygame.image.load("assets/start_screen.png").convert()
-level_background = pygame.image.load('background.jpeg').convert()
-level_ground = pygame.image.load('road.png').convert()
-image = pygame.image.load("player.png").convert()
-enemy = pygame.image.load('enemy.png').convert()
+
+impstart = pygame.image.load("assets/start_screen.png").convert_alpha()
+level_background = pygame.image.load('background.jpeg').convert_alpha()
+level_ground = pygame.image.load('road.png').convert_alpha()
+player = pygame.image.load("player.png").convert_alpha()
+enemy = pygame.image.load('enemy.png').convert_alpha()
+
+# image on object
+player_rect = player.get_rect(midbottom = (90, 780))
+
 
 
 # copying content from each screen
 screen.blit(impstart, (0, 0))
+
+
+#### separate start screen into its own gamestate, as well as play and end screen 
+
 
 #Classes
 class Player(object): 
@@ -37,31 +46,25 @@ class Player(object):
     def __init__(self, x, y):
         self.x = x
         self.y = y
-        self.is_jump = False
-        self.jump_count = 10
+
+        self.gravity = 0 
+        self.score = 0
+        self.hitbox = (self.x + 10, self.y + 10, 30, 40)
+
 
     def draw(self):
-        # Initialing Color
-        color = (255,0,0)
-  
+        screen.blit(player, player_rect)
+
+    def move(self, speed_x, speed_y):
+        self.x += speed_x
+        self.y += speed_y
+    
         # Drawing Rectangle
-        pygame.draw.rect(screen, color, (self.x, self.y, 40, 40))
+        pygame.draw.rect(screen, (255,0,0), (self.x, self.y, 40, 40))
 
     def jump(self):
-        # Check if mario is jumping and then execute the
-        # jumping code.
-        if self.is_jump:
-            if self.jump_count >= -10:
-                neg = 1
-                if self.jump_count < 0:
-                    neg = -1
-                self.y -= self.jump_count**2 * 0.1 * neg
-                self.jump_count -= 1
-            else:
-                self.is_jump = False
-                self.jump_count = 10
-        
-        
+        self.gravity = -30
+        #jump higher is a greater negative number (-100)
 
 
 class Enemy(object):
@@ -73,7 +76,9 @@ class Enemy(object):
         self.gravity = 0
 
     def draw(self):
-        screen.blit(self.image,(self.x, self.y))
+
+        screen.blit(enemy,(self.x, self.y))
+
 
     def move(self, speed_x, speed_y):
         self.x += speed_x
@@ -96,13 +101,29 @@ while (status):
         if i.type == pygame.MOUSEBUTTONDOWN and 145 < x < 445 and 566 < y < 666:
             level_start()
         
-        if i.type == pygame.KEYDOWN and pygame.key.get_pressed()[K_SPACE]:
-                # Start to jump by setting isJump to True.
-            print('yes')
-            user.is_jump = True
-            
 
-    user.jump()
+        if i.type == pygame.KEYDOWN:
+            if i.key == pygame.K_SPACE:
+                user.jump()
+            print('yes')
+    
+    #natural looking gravity 
+    user.gravity += 1
+    player_rect.y += user.gravity 
+
+    #the floor 
+    if player_rect.bottom > 600: 
+        player_rect.bottom = 600
+
+    #redraw the background after every frame from jumping         
+    screen.blit(level_background,(0,0))
+    screen.blit(level_ground,(0, 832 - 40))
+
+    #redraw the player
+    user.draw()
+
+    #clock 
+
     clock.tick(60)
     pygame.display.update()
 
