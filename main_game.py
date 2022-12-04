@@ -20,6 +20,7 @@ pygame.display.set_caption('shooter!')
 clock = pygame.time.Clock()
 
 # loading image onto surface object
+
 impstart = pygame.image.load("assets/start_screen.png").convert_alpha()
 level_background = pygame.image.load('background.jpeg').convert_alpha()
 level_ground = pygame.image.load('road.png').convert_alpha()
@@ -30,10 +31,13 @@ enemy = pygame.image.load('enemy.png').convert_alpha()
 player_rect = player.get_rect(midbottom = (90, 780))
 
 
+
 # copying content from each screen
 screen.blit(impstart, (0, 0))
 
+
 #### separate start screen into its own gamestate, as well as play and end screen 
+
 
 #Classes
 class Player(object): 
@@ -42,6 +46,7 @@ class Player(object):
     def __init__(self, x, y):
         self.x = x
         self.y = y
+
         self.gravity = 0 
         self.score = 0
         self.hitbox = (self.x + 10, self.y + 10, 30, 40)
@@ -61,6 +66,7 @@ class Player(object):
         self.gravity = -30
         #jump higher is a greater negative number (-100)
 
+
 class Enemy(object):
     #move the player across the screen, have a hitbox/range where you can shoot and kill
 
@@ -70,7 +76,9 @@ class Enemy(object):
         self.gravity = 0
 
     def draw(self):
+
         screen.blit(enemy,(self.x, self.y))
+
 
     def move(self, speed_x, speed_y):
         self.x += speed_x
@@ -93,6 +101,7 @@ while (status):
         if i.type == pygame.MOUSEBUTTONDOWN and 145 < x < 445 and 566 < y < 666:
             level_start()
         
+
         if i.type == pygame.KEYDOWN:
             if i.key == pygame.K_SPACE:
                 user.jump()
@@ -114,6 +123,7 @@ while (status):
     user.draw()
 
     #clock 
+
     clock.tick(60)
     pygame.display.update()
 
