@@ -14,7 +14,6 @@ y = 832
 # creating window object and caption for window
 screen = pygame.display.set_mode((x, y))
 pygame.display.set_caption('shooter!')
- rayane-branch
 clock = pygame.time.Clock()
 
 # loading image onto surface object
