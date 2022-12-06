@@ -1,5 +1,5 @@
 """
-screen testing
+main gameplay mechanics
 November 24, 2022
 """
 
@@ -7,12 +7,10 @@ November 24, 2022
 import pygame
 from pygame.locals import *
 
-# initializing library
+# initializing pygame library
 pygame.init() 
 x = 1280
 y = 832
-
-
 
 # creating window object and caption for window
 screen = pygame.display.set_mode((x, y))
@@ -20,7 +18,6 @@ pygame.display.set_caption('shooter!')
 clock = pygame.time.Clock()
 
 # loading image onto surface object
-
 impstart = pygame.image.load("assets/start_screen.png").convert_alpha()
 level_background = pygame.image.load('background.jpeg').convert_alpha()
 level_ground = pygame.image.load('road.png').convert_alpha()
@@ -30,19 +27,15 @@ enemy = pygame.image.load('enemy.png').convert_alpha()
 # image on object
 player_rect = player.get_rect(midbottom = (90, 780))
 
-
-
 # copying content from each screen
 screen.blit(impstart, (0, 0))
-
 
 #### separate start screen into its own gamestate, as well as play and end screen 
 
 
-#Classes
+# classes
 class Player(object): 
-    #move the player across the screen, have a hitbox/range where you can shoot and kill
-    
+    # moves the player across the screen, have a hitbox/range where you can shoot and kill
     def __init__(self, x, y):
         self.x = x
         self.y = y
@@ -68,8 +61,7 @@ class Player(object):
 
 
 class Enemy(object):
-    #move the player across the screen, have a hitbox/range where you can shoot and kill
-
+    # move the enemy character across the screen, have a hitbox/range where you can shoot and kill
     def __init__(self, x, y):
         self.x = x
         self.y = y
@@ -84,7 +76,7 @@ class Enemy(object):
         self.x += speed_x
         self.y += speed_y
 
-#Starting the level
+# Starting the level
 user = Player(40, y - 80)
 def level_start():
     screen.blit(level_background,(0,0))
@@ -98,9 +90,8 @@ while (status):
             status = False
         
         x,y = pygame.mouse.get_pos()
-        if i.type == pygame.MOUSEBUTTONDOWN and 145 < x < 445 and 566 < y < 666:
+        if i.type == pygame.MOUSEBUTTONDOWN and 141 < x < 441 and 568 < y < 668:
             level_start()
-        
 
         if i.type == pygame.KEYDOWN:
             if i.key == pygame.K_SPACE:
