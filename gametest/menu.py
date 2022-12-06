@@ -14,6 +14,7 @@ class Menu():
         self.run_display = True
         self.cursor_rect = pygame.Rect(0, 0, 20, 20)
         self. offset = -100
+        pygame.display.set_caption('shooter!')
 
     # indicates which line of the menu you're on
     def drawCursor(self):
@@ -33,6 +34,7 @@ class MainMenu(Menu):
         self.startx, self.starty = self.half_w, self.half_h + 30
         self.helpx, self.helpy = self.half_w, self.half_h + 50
         self.quitx, self.quity = self.half_w, self.half_h + 70
+        self.creditsx, self.creditsy = self.half_w, self.half_h + 90
         self.cursor_rect.midtop = (self.startx + self.offset, self.starty)
     
     def display_menu(self):
@@ -45,6 +47,7 @@ class MainMenu(Menu):
             self.game.drawText("Start Game", 20, self.startx, self.starty)
             self.game.drawText("Help", 20, self.helpx, self.helpy)
             self.game.drawText("Quit", 20, self.quitx, self.quity)
+            self.game.drawText("Credits", 20, self.creditsx, self.creditsy)
             self.drawCursor()
             self.blitScreen()
 
@@ -58,10 +61,16 @@ class MainMenu(Menu):
                 self.cursor_rect.midtop = (self.quitx + self.offset, self.quity)
                 self.state = "Quit"
             elif self.state == "Quit":
+                self.cursor_rect.midtop = (self.creditsx + self.offset, self.creditsy)
+                self.state = "Credits"
+            elif self.state == "Credits":
                 self.cursor_rect.midtop = (self.startx + self.offset, self.starty)
                 self.state = "Start"
         elif self.game.up_key:
             if self.state == "Start":
+                self.cursor_rect.midtop = (self.creditsx + self.offset, self.creditsy)
+                self.state = "Credits"
+            elif self.state == "Credits":
                 self.cursor_rect.midtop = (self.quitx + self.offset, self.quity)
                 self.state = "Quit"
             elif self.state == "Help":
@@ -81,6 +90,8 @@ class MainMenu(Menu):
                 self.game.curr_menu = self.game.helpMenu
             elif self.state == "Quit":
                 self.game.curr_menu = self.game.quitMenu
+            elif self.state == "Credits":
+                self.game.curr_menu = self.game.creditsMenu
             self.run_display = False
 
 # doesn't actually work 100%, needs some TLC to get the cursor to do its thing    
@@ -96,27 +107,61 @@ class quitMenu(Menu):
         self.run_display = True
         while self.run_display:
             self.game.checkEvents()
-            self.game.display.fill((0, 0, 0))
+            if self.game.back_key:
+                self.game.curr_menu = self.game.mainMenu
+                self.run_display = False
+            elif self.game.up_key or self.game.down_key:
+                if self.state == "Yes!":
+                    self.cursor_rect.midtop = (self.nox + self.offset, self.noy)
+                    self.state = "No!"
+                elif self.state == "No!":
+                    self.cursor_rect.midtop = (self.yesx + self.offset, self.yesy)
+                    self.state == "Yes!"
+            elif self.game.start_key:
+                if self.state == "Yes!":
+                    self.playing = False
+                elif self.state == "No!":
+                    self.game.curr_menu = self.game.mainMenu
+                self.run_display = False
+            self.game.display.fill((self.game.black))
             self.game.drawText("Are you sure you want to quit?", 20, self.half_w, self.half_h - 30)
             self.game.drawText("Yes!", 15, self.yesx, self.yesy)
             self.game.drawText("No!", 15, self.nox, self.noy)
             self.drawCursor()
             self.blitScreen()
 
+    """
+    # move between the different options (i hope)
+    def moveCursor(self):
+        if self.game.up_key or self.game.down_key:
+            if self.state == "Yes!":
+                self.cursor_rect.midtop = (self.nox + self.offset, self.noy)
+                self.state = "No!"
+            elif self.state == "No!":
+                self.cursor_rect.midtop = (self.yesx + self.offset, self.yesy)
+                self.state == "Yes!"
+    """
+    # check what user input is
+    """
     def checkInput(self):
+        self.moveCursor()
         if self.game.back_key:
-            self.game.curr_menu = self.game.main_menu
+            self.game.curr_menu = self.game.mainMenu
             self.run_display = False
         elif self.game.up_key or self.game.down_key:
             if self.state == "Yes!":
-                self.state = "No!"
                 self.cursor_rect.midtop = (self.nox + self.offset, self.noy)
+                self.state = "No!"
             elif self.state == "No!":
-                self.state == "Yes!"
                 self.cursor_rect.midtop = (self.yesx + self.offset, self.yesy)
+                self.state == "Yes!"
         elif self.game.start_key:
-            pass
-
+            if self.state == "Yes!":
+                pygame.quit()
+            elif self.state == "No!":
+                self.game.curr_menu = self.game.mainMenu
+            # self.run_display = False
+    """
 class helpMenu(Menu):
     def __init__(self, game):
         Menu.__init__(self, game)
@@ -126,9 +171,25 @@ class helpMenu(Menu):
         while self.run_display:
             self.game.checkEvents()
             if self.game.start_key or self.game.back_key:
-                self.game.curr_menu = self.game.main_menu
+                self.game.curr_menu = self.game.mainMenu
                 self.run_display = False
             self.game.display.fill(self.game.black)
-            pygame.image.load("start_screen.png").convert()
+            helpscrn = pygame.image.load("help_screen.png").convert()
             pygame.display.flip()
-            self.blitScreen()
+            self.game.window.blit(helpscrn, (0,0))
+
+class creditsMenu(Menu):
+    def __init__(self, game):
+        Menu.__init__(self, game)
+    
+    def display_menu(self):
+        self.run_display = True
+        while self.run_display:
+            self.game.checkEvents()
+            if self.game.back_key:
+                self.game.curr_menu = self.game.mainMenu
+                self.run_display = False
+            self.game.display.fill(self.game.black)
+            creditscrn = pygame.image.load("credits_screen.png").convert()
+            pygame.display.flip()
+            self.game.window.blit(creditscrn, (0,0))

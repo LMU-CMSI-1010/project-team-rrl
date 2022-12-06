@@ -26,18 +26,21 @@ class Game():
         self.display = pygame.Surface((self.display_width, self.display_height))
         self.window = pygame.display.set_mode(((self.display_width, self.display_height)))
         self.font_name = "IBMPlexMono-Medium.ttf"
-        self.main_menu = MainMenu(self)
+        self.mainMenu = MainMenu(self)
         self.helpMenu = helpMenu(self)
         self.quitMenu = quitMenu(self)
-        self.curr_menu = self.main_menu
+        self.creditsMenu = creditsMenu(self)
+        self.curr_menu = self.mainMenu
     
+    # creating game loop given the state change
     def game_loop(self):
         while self.playing:
             self.checkEvents()
             if self.start_key:
                 self.playing = False
-            self.display.fill(self.black)
-            self.window.blit(self.display, (0, 0))
+            levelscrn = pygame.image.load("scrollable_background.png").convert()
+            pygame.display.flip()
+            self.window.blit(levelscrn, (0, 0))
             pygame.display.update()
             self.resetInput()
 
