@@ -4,13 +4,16 @@ November 24, 2022
 """
 
 # importing libraries
-import pygame
+import pygame, sys
 from pygame.locals import *
 
 # initializing library
 pygame.init() 
 x = 1280
 y = 832
+
+# velocity of objects
+vel = 10
 
 
 
@@ -21,7 +24,7 @@ clock = pygame.time.Clock()
 
 # loading image onto surface object
 
-impstart = pygame.image.load("assets/start_screen.png").convert_alpha()
+impstart = pygame.image.load("assets/screens/start_screen.png").convert_alpha()
 level_background = pygame.image.load('background.jpeg').convert_alpha()
 level_ground = pygame.image.load('road.png').convert_alpha()
 player = pygame.image.load("player.png").convert_alpha()
@@ -53,6 +56,11 @@ class Player(object):
         self.gravity = 0 
         self.score = 0
         self.hitbox = (self.x + 10, self.y + 10, 30, 40)
+
+        self.velX = 0
+        self.velY = 0
+
+
 
 
     def draw(self):
@@ -91,7 +99,7 @@ class Enemy(object):
 user = Player(40, y - 80)
 def level_start():
     screen.blit(level_background,(0,0))
-    screen.blit(level_ground,(0, 832 - 40))
+    screen.blit(level_ground,(0, 832 - 60))
     user.draw() 
 
 status = True
@@ -109,6 +117,21 @@ while (status):
             if i.key == pygame.K_SPACE:
                 user.jump()
             print('yes')
+    
+    # Key bind movement
+
+    screen.blit(level_background, (0,0))
+
+    userInput = pygame.key.get_pressed()
+
+    if userInput[pygame.K_LEFT]:
+        x -= vel
+
+    if userInput[pygame.K_RIGHT]:
+        x += vel
+
+    if userInput[pygame.K_DOWN]:
+        y += vel
     
     #natural looking gravity 
     user.gravity += 1
