@@ -27,7 +27,6 @@ class Player(object):
         self.score = 0
         self.hitbox = (self.x + 10, self.y + 10, 30, 40)
 
-
     def draw(self):
         screen.blit(self.image,(self.x, self.y))
 
@@ -94,6 +93,10 @@ class Projectile(object):
         self.vel = 10 * facing
 
     def draw(self, win):
+<<<<<<< HEAD
         pygame.draw.circle(win, self.color, (self.x,self.y), self.radius)
 
     
+=======
+        pass
+>>>>>>> 7cf50ee (class update)
