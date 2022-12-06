@@ -14,6 +14,7 @@ class Menu():
         self.run_display = True
         self.cursor_rect = pygame.Rect(0, 0, 20, 20)
         self. offset = -100
+        pygame.display.set_caption('shooter!')
 
     # indicates which line of the menu you're on
     def drawCursor(self):
@@ -129,6 +130,6 @@ class helpMenu(Menu):
                 self.game.curr_menu = self.game.main_menu
                 self.run_display = False
             self.game.display.fill(self.game.black)
-            pygame.image.load("start_screen.png").convert()
+            helpscrn = pygame.image.load("help_screen.png").convert()
             pygame.display.flip()
-            self.blitScreen()
+            self.game.window.blit(helpscrn, (0, 0))

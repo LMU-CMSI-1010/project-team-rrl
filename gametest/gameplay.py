@@ -31,13 +31,15 @@ class Game():
         self.quitMenu = quitMenu(self)
         self.curr_menu = self.main_menu
     
+    # creating game loop given the state change
     def game_loop(self):
         while self.playing:
             self.checkEvents()
             if self.start_key:
                 self.playing = False
-            self.display.fill(self.black)
-            self.window.blit(self.display, (0, 0))
+            levelscrn = pygame.image.load("scrollable_background.png").convert()
+            pygame.display.flip()
+            self.window.blit(levelscrn, (0, 0))
             pygame.display.update()
             self.resetInput()
 
