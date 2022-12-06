@@ -27,8 +27,11 @@ level_ground = pygame.image.load('road.png').convert_alpha()
 player = pygame.image.load("player.png").convert_alpha()
 enemy = pygame.image.load('enemy.png').convert_alpha()
 
+player = pygame.transform.scale(player, (player.get_width() / 5, player.get_height() / 5))
 # image on object
 player_rect = player.get_rect(midbottom = (90, 780))
+
+
 
 
 
