@@ -130,7 +130,6 @@ class Player(object):
         self.score = 0
         self.hitbox = (self.x + 10, self.y + 10, 30, 40)
 
-
     def draw(self):
         screen.blit(self.image,(self.x, self.y))
 
