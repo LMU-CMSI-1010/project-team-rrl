@@ -14,6 +14,9 @@ GRAVITY = 0.75
 moving_left = False
 moving_right = False
 
+#load image
+bullet_image = pygame.image.load()
+
 #Define colors
 BG = (144, 201, 120)
 RED = (255, 0, 0)
