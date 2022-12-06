@@ -132,4 +132,3 @@ class helpMenu(Menu):
             pygame.image.load("start_screen.png").convert()
             pygame.display.flip()
             self.blitScreen()
-        
