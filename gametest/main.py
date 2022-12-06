@@ -3,7 +3,7 @@
 """
 import pygame
 from gameplay import Game
-from camera import * 
+# from camera import * 
 
 g = Game()
 
