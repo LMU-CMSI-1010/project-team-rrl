@@ -144,7 +144,9 @@ class Bullet(pygame.sprite.Sprite):
             dx = self.speed
             self.direcion = -1
             self.flip = True
-
+    
+    def draw(self):
+        screen.blit(pygame.transform.flip(self.image, self.flip, False), self.rect)
 
     def update(self):
         #move the bullet
@@ -204,11 +206,10 @@ while (status):
         if i.type == pygame.KEYDOWN:
             if i.key == pygame.K_a:
                 moving_left = True
-                print(moving_left)
             if i.key == pygame.K_d:
                 moving_right = True
             if i.key == pygame.K_SPACE:
-                enemy.jump = True
+                player.jump = True
             if i.key == pygame.K_ESCAPE:
                 status = False 
 
