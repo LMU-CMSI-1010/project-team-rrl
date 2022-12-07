@@ -141,7 +141,7 @@ class Bullet(pygame.sprite.Sprite):
 #create sprite groups
 bullet_group = pygame.sprite.Group()
 
-enemy = Person('player', random.randrange(300, 800), random.randrange(200, 600), 5) 
+enemy = Person('enemy', random.randrange(300, 800), random.randrange(200, 600), 5) 
 
 #create screen 
 status = True
