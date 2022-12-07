@@ -20,6 +20,9 @@ shoot = False
 #load image
 bullet_image = pygame.image.load("bullet.png").convert_alpha()
 
+#list of bullets
+bullets = []
+
 #Define colors
 BG = (144, 201, 120)
 RED = (255, 0, 0)
@@ -38,7 +41,8 @@ class Person(pygame.sprite.Sprite):
         self.alive = True
         
         if self.character == 'enemy':
-            img = pygame.image.load("enemy.png").convert_alpha()
+            img = pygame.image.load("enemy_updated.png").convert_alpha()
+            img = pygame.transform.scale(img, (img.get_width() * 1.5, img.get_height() * 1.5))
         elif self.character == 'player':
             img = pygame.image.load("player.png").convert_alpha()
             img = pygame.transform.flip(img, True, False)
@@ -99,8 +103,8 @@ class Person(pygame.sprite.Sprite):
     def shoot(self):
         if self.shoot_cooldown == 0:
             self.shoot_cooldown == 20
-            bullet = Bullet(self.rect.centerx, self.rect.centery, self.direction)
-            bullet_group.add(bullet)
+            # bullet = Bullet(self.rect.centerx, self.rect.centery, self.direction)
+            # bullet_group.add(bullet)
     
     def check_alive(self):
         if self.health <= 0:
@@ -121,7 +125,26 @@ class Bullet(pygame.sprite.Sprite):
         self.rect.center = (x,y)
         self.direction = direction 
 
-        self.image = pygame.transform.scale(bullet_image, (bullet_image.get_width() / 5, bullet_image.get_height() / 5))
+        self.flip = False 
+
+        self.image = pygame.transform.scale(bullet_image, (bullet_image.get_width() / 10, bullet_image.get_height() / 10))
+
+    ### added to figure out how bullet can shoot from the left, but idk how LOL
+    def move(self, moving_left, moving_right):
+        #Resetting the movement variables
+        dy = 0
+        dx = 0 
+
+        #Assigning the movement variables if moving right or left
+        if moving_left:
+            dx = -self.speed
+            self.direction = 1
+            self.flip = False
+        if moving_right:
+            dx = self.speed
+            self.direcion = -1
+            self.flip = True
+
 
     def update(self):
         #move the bullet
@@ -133,15 +156,16 @@ class Bullet(pygame.sprite.Sprite):
 
         # #check collision with characters
         # if pygame.sprite.spritecollide(enemy, bullet_group, False):
-        #     if enemy.alive:
-        #         enemy.health -= 1
+        #     if player.alive:
+        #         player.health -= 1
         #         self.kill()
 
 
 #create sprite groups
 bullet_group = pygame.sprite.Group()
 
-enemy = Person('enemy', random.randrange(300, 800), random.randrange(200, 600), 5) 
+enemy = Person('enemy', random.randrange(850, 900), random.randrange(730, 735), 5) 
+player = Person('player', 200, 705, 5)
 
 #create screen 
 status = True
@@ -151,19 +175,25 @@ while (status):
 
     draw_background()
 
+    player.update()
+    player.draw()
+    player.move(moving_left, moving_right)
+
     enemy.update()
     enemy.draw()
-    enemy.move(moving_left, moving_right)
+    #enemy.move(moving_left, moving_right)
 
     # update and draw groups
     bullet_group.update()
     bullet_group.draw(screen)
 
     #update player actions
-    if enemy.alive:
+    if player.alive:
         #shooting bullets
         if shoot:
-            enemy.shoot()
+            player.shoot()
+            bullet = Bullet(player.rect.x + 370, player.rect.y + 340, player.direction)
+            bullet_group.add(bullet)
 
 
     for i in pygame.event.get():
@@ -185,6 +215,7 @@ while (status):
             #keyboard input to shoot
             if i.key == pygame.K_r:
                 shoot = True
+                    
             # if i.key == pygame.K_q:
             #     shoot == True
         
