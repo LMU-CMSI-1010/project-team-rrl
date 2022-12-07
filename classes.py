@@ -24,12 +24,15 @@ bullet_image = pygame.image.load("bullet.png").convert_alpha()
 bullets = []
 
 #Define colors
-BG = (144, 201, 120)
 RED = (255, 0, 0)
 
+#real background and ground
+level_background = pygame.image.load('background.jpeg').convert_alpha()
+level_ground = pygame.image.load('road.png').convert_alpha()
+
 def draw_background():
-    screen.fill(BG)
-    pygame.draw.line(screen, RED, (0, 832 - 60), (1280, 832 - 60))
+    screen.blit(level_background, (0,0))
+    screen.blit(level_ground, (0, 832 - 60))
 
 class Person(pygame.sprite.Sprite):
     #move the player across the screen, have a hitbox/range where you can shoot and kill
@@ -39,10 +42,11 @@ class Person(pygame.sprite.Sprite):
         self.speed = speed
         self.character = character
         self.alive = True
+        self.jumps = 2
         
         if self.character == 'enemy':
             img = pygame.image.load("enemy_updated.png").convert_alpha()
-            img = pygame.transform.scale(img, (img.get_width() * 1.5, img.get_height() * 1.5))
+            img = pygame.transform.scale(img, (img.get_width() * 1.8, img.get_height() * 1.8))
         elif self.character == 'player':
             img = pygame.image.load("player.png").convert_alpha()
             img = pygame.transform.flip(img, True, False)
@@ -86,11 +90,13 @@ class Person(pygame.sprite.Sprite):
         if self.jump:
             self.y_vel = -11
             self.jump = False
+            #self.jumps -= 1
         #Make guy come down with gravity
         self.y_vel += GRAVITY
         if self.y_vel > 10:
             self.y_vel 
-        dy += self.y_vel 
+        dy += self.y_vel
+
         
         #Checking with floor
         if self.rect.bottom + dy > 832 - 60:
@@ -166,7 +172,7 @@ class Bullet(pygame.sprite.Sprite):
 #create sprite groups
 bullet_group = pygame.sprite.Group()
 
-enemy = Person('enemy', random.randrange(850, 900), random.randrange(730, 735), 5) 
+enemy = Person('enemy', random.randrange(880, 890), random.randrange(720, 725), 5) 
 player = Person('player', 200, 705, 5)
 
 #create screen 
@@ -194,7 +200,7 @@ while (status):
         #shooting bullets
         if shoot:
             player.shoot()
-            bullet = Bullet(player.rect.x + 370, player.rect.y + 340, player.direction)
+            bullet = Bullet(player.rect.x + 466, player.rect.y + 340, player.direction)
             bullet_group.add(bullet)
 
 
@@ -216,7 +222,6 @@ while (status):
             #keyboard input to shoot
             if i.key == pygame.K_r:
                 shoot = True
-                    
             # if i.key == pygame.K_q:
             #     shoot == True
         
