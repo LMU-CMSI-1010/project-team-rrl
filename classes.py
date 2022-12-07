@@ -41,7 +41,7 @@ class Person(pygame.sprite.Sprite):
         self.alive = True
         
         if self.character == 'enemy':
-            img = pygame.image.load("enemy.png").convert_alpha()
+            img = pygame.image.load("enemy_updated.png").convert_alpha()
             img = pygame.transform.scale(img, (img.get_width() * 1.5, img.get_height() * 1.5))
         elif self.character == 'player':
             img = pygame.image.load("player.png").convert_alpha()
