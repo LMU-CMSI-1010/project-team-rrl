@@ -91,10 +91,14 @@ class Person(pygame.sprite.Sprite):
             self.flip = True
         
         #Jump
-        if self.jump:
+        if self.jump and 0 < self.jumps <=2:
             self.y_vel = -11
             self.jump = False
-            #self.jumps -= 1
+            self.jumps -= 1
+        
+        if self.jumps == 0 and self.rect.bottom == 832-60:
+            self.jumps = 2
+
             
         #Make guy come down with gravity
         self.y_vel += GRAVITY
