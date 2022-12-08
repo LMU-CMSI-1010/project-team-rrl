@@ -68,6 +68,7 @@ class Person(pygame.sprite.Sprite):
 
         self.health = 1
         self.max_health = self.health
+        
         #Enemy specific variables:
         self.move_counter = 0
         self.idling = False
@@ -113,7 +114,7 @@ class Person(pygame.sprite.Sprite):
 
         #Checking with floor
         if self.rect.bottom + dy > 832 - 60:
-            dy = 832-60 - self.rect.bottom
+            dy =  832-60 - self.rect.bottom
 
         #update position
         self.rect.x += dx
@@ -122,7 +123,7 @@ class Person(pygame.sprite.Sprite):
     def shoot(self):
         # if self.shoot_cooldown == 0:
         #     self.shoot_cooldown == 20
-        bullet = Bullet(self.rect.x + 540, self.rect.y + 340, self .direction)
+        bullet = Bullet(self.rect.x + 500, self.rect.y + 340, self .direction)
         bullet_group.add(bullet)
         #pygame.time.wait(100)
 
@@ -223,7 +224,8 @@ class Bullet(pygame.sprite.Sprite):
 #create sprite groups
 bullet_group = pygame.sprite.Group()
 
-enemy = Person('enemy', random.randrange(200, 800), random.randrange(800, 832), 5) 
+# enemy = Person('enemy', random.randrange(880, 890), random.randrange(720, 725), 5) 
+enemy = Person('enemy', 880, 720, 5) 
 player = Person('player', 200, 705, 5)
 
 #create screen 
@@ -239,6 +241,10 @@ while (status):
     player.draw()
     player.move(moving_left, moving_right)
 
+
+    # enemy.rect.x = 880
+    enemy.rect.y = 650
+
     enemy.ai() 
     enemy.update()
     enemy.draw()
@@ -246,6 +252,7 @@ while (status):
 
     # update and draw groups
     bullet_group.update()
+
     #bullet_group.move(moving_left, moving_right)
     bullet_group.draw(screen)
 
@@ -276,8 +283,6 @@ while (status):
             #keyboard input to shoot
             if i.key == pygame.K_r:
                 shoot = True
-            # if i.key == pygame.K_q:
-            #     shoot == True
         
         #Keyboard inputs released
         if i.type == pygame.KEYUP:
@@ -292,9 +297,5 @@ while (status):
 
                 if player.jump_count == 0:
                         player.jump = False
-            # if i.key == pygame.K_q:
-            #     shoot == False
-
-    
 
     pygame.display.update()
