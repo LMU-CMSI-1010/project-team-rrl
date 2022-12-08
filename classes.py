@@ -123,7 +123,7 @@ class Person(pygame.sprite.Sprite):
     def shoot(self):
         # if self.shoot_cooldown == 0:
         #     self.shoot_cooldown == 20
-        bullet = Bullet(self.rect.x + 500, self.rect.y + 340, self .direction)
+        bullet = Bullet(self.rect.x + 475, self.rect.y + 340, self .direction)
         bullet_group.add(bullet)
         #pygame.time.wait(100)
 
@@ -213,9 +213,9 @@ class Bullet(pygame.sprite.Sprite):
 
         # #check collision with characters
  
-        if pygame.sprite.spritecollide(player, bullet_group, False):
-            if player.alive:
-                self.kill()
+        # if pygame.sprite.spritecollide(player, bullet_group, False):
+        #     if player.alive:
+        #         self.kill()
         # if pygame.sprite.spritecollide(enemy, bullet_group, False):
         #     if enemy.alive:
         #         self.kill()    
