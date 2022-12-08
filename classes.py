@@ -68,6 +68,11 @@ class Person(pygame.sprite.Sprite):
 
         self.health = 1
         self.max_health = self.health
+        #Enemy specific variables:
+        self.move_counter = 0
+        self.idling = False
+        self.idling_counter = 0 
+
 
     def update(self):
         self.check_alive
@@ -117,9 +122,34 @@ class Person(pygame.sprite.Sprite):
     def shoot(self):
         # if self.shoot_cooldown == 0:
         #     self.shoot_cooldown == 20
-        bullet = Bullet(player.rect.x + 466, player.rect.y + 340, player.direction)
+        bullet = Bullet(self.rect.x + 540, self.rect.y + 340, self .direction)
         bullet_group.add(bullet)
-        pygame.time.wait(100)
+        #pygame.time.wait(100)
+
+    def ai(self):
+        if self.alive and player.alive:
+            if self.idling == False and random.randint(1, 100) == 1:
+                self.idling = True
+                self.idling_counter = 50
+            
+            if self.idling == False:
+                if self.direction == 1:
+                    ai_moving_right = False
+                else:
+                    ai_moving_right = True
+                
+                ai_moving_left = not ai_moving_right
+                self.move(ai_moving_left, ai_moving_right)
+                self.move_counter += 1
+
+                if self.move_counter > 80 :
+                    self.direction *= -1
+                    self.move_counter *= -1  
+            else:
+                self.idling_counter -= 1
+                if self.idling_counter <= 0:
+                    self.idling = False
+
 
     def check_alive(self):
         if self.health <= 0:
@@ -181,16 +211,19 @@ class Bullet(pygame.sprite.Sprite):
             self.kill()
 
         # #check collision with characters
+ 
+        if pygame.sprite.spritecollide(player, bullet_group, False):
+            if player.alive:
+                self.kill()
         # if pygame.sprite.spritecollide(enemy, bullet_group, False):
-        #     if player.alive:
-        #         player.health -= 1
-        #         self.kill()
+        #     if enemy.alive:
+        #         self.kill()    
 
 
 #create sprite groups
 bullet_group = pygame.sprite.Group()
 
-enemy = Person('enemy', random.randrange(880, 890), random.randrange(720, 725), 5) 
+enemy = Person('enemy', random.randrange(200, 800), random.randrange(800, 832), 5) 
 player = Person('player', 200, 705, 5)
 
 #create screen 
@@ -206,6 +239,7 @@ while (status):
     player.draw()
     player.move(moving_left, moving_right)
 
+    enemy.ai() 
     enemy.update()
     enemy.draw()
 
@@ -232,7 +266,7 @@ while (status):
             if i.key == pygame.K_d:
                 moving_right = True
             
-            if i.key == pygame.K_SPACE:
+            if i.key == pygame.K_SPACE or i.key == pygame.K_w:
                 player.jump = True
                 player.jump_count -= 1 
 
