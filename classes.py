@@ -20,16 +20,22 @@ shoot = False
 #load image
 bullet_image = pygame.image.load("bullet.png").convert_alpha()
 
-#list of bullets
+#bullets
 bullets = []
+max_bullets = 5
+next_bullet_time = 0
+bullet_delta_time = 200 #milliseconds
 
 #Define colors
-BG = (144, 201, 120)
 RED = (255, 0, 0)
 
+#real background and ground
+level_background = pygame.image.load('background.jpeg').convert_alpha()
+level_ground = pygame.image.load('road.png').convert_alpha()
+
 def draw_background():
-    screen.fill(BG)
-    pygame.draw.line(screen, RED, (0, 832 - 60), (1280, 832 - 60))
+    screen.blit(level_background, (0,0))
+    screen.blit(level_ground, (0, 832 - 60))
 
 class Person(pygame.sprite.Sprite):
     #move the player across the screen, have a hitbox/range where you can shoot and kill
@@ -39,10 +45,11 @@ class Person(pygame.sprite.Sprite):
         self.speed = speed
         self.character = character
         self.alive = True
+        self.jumps = 2
         
         if self.character == 'enemy':
-            img = pygame.image.load("enemy_updated.png").convert_alpha()
-            img = pygame.transform.scale(img, (img.get_width() * 1.5, img.get_height() * 1.5))
+            img = pygame.image.load("enemy.png").convert_alpha()
+            img = pygame.transform.scale(img, (img.get_width() * 1.8, img.get_height() * 1.8))
         elif self.character == 'player':
             img = pygame.image.load("player.png").convert_alpha()
             img = pygame.transform.flip(img, True, False)
@@ -53,6 +60,7 @@ class Person(pygame.sprite.Sprite):
 
         self.direction = 1
         self.flip = False
+        self.jump_count = 3 
         self.jump = False
         self.y_vel = 0
 
@@ -83,15 +91,21 @@ class Person(pygame.sprite.Sprite):
             self.flip = True
         
         #Jump
-        if self.jump:
+        if self.jump and 0 < self.jumps <=2:
             self.y_vel = -11
             self.jump = False
+            self.jumps -= 1
+        
+        if self.jumps == 0 and self.rect.bottom == 832-60:
+            self.jumps = 2
+
+            
         #Make guy come down with gravity
         self.y_vel += GRAVITY
         if self.y_vel > 10:
             self.y_vel 
-        dy += self.y_vel 
-        
+        dy += self.y_vel
+
         #Checking with floor
         if self.rect.bottom + dy > 832 - 60:
             dy = 832-60 - self.rect.bottom
@@ -101,11 +115,12 @@ class Person(pygame.sprite.Sprite):
         self.rect.y += dy
 
     def shoot(self):
-        if self.shoot_cooldown == 0:
-            self.shoot_cooldown == 20
-            # bullet = Bullet(self.rect.centerx, self.rect.centery, self.direction)
-            # bullet_group.add(bullet)
-    
+        # if self.shoot_cooldown == 0:
+        #     self.shoot_cooldown == 20
+        bullet = Bullet(player.rect.x + 466, player.rect.y + 340, player.direction)
+        bullet_group.add(bullet)
+        pygame.time.wait(100)
+
     def check_alive(self):
         if self.health <= 0:
             self.health = 0
@@ -124,26 +139,35 @@ class Bullet(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.center = (x,y)
         self.direction = direction 
-
+        
+        #self.direction = 1
         self.flip = False 
 
         self.image = pygame.transform.scale(bullet_image, (bullet_image.get_width() / 10, bullet_image.get_height() / 10))
 
-    ### added to figure out how bullet can shoot from the left, but idk how LOL
+    ## added to figure out how bullet can shoot from the left, but idk how LOL
     def move(self, moving_left, moving_right):
-        #Resetting the movement variables
-        dy = 0
-        dx = 0 
 
-        #Assigning the movement variables if moving right or left
-        if moving_left:
-            dx = -self.speed
-            self.direction = 1
-            self.flip = False
-        if moving_right:
-            dx = self.speed
-            self.direcion = -1
-            self.flip = True
+        if self.move(moving_left, moving_right):
+            pass
+
+        # #Resetting the movement variables
+        # dy = 0
+        # dx = 0 
+
+        # #Assigning the movement variables if moving right or left
+        # if moving_left:
+        #     dx = -self.speed
+        #     self.direction = 1
+        #     self.flip = False
+        # if moving_right:
+        #     dx = self.speed
+        #     self.direcion = -1
+        #     self.flip = True
+
+        ##update position
+        # self.rect.x += dx
+        # self.rect.y += dy
     
     def draw(self):
         screen.blit(pygame.transform.flip(self.image, self.flip, False), self.rect)
@@ -153,7 +177,7 @@ class Bullet(pygame.sprite.Sprite):
         self.rect.x += (self.direction * self.speed)
 
         #check boundaries of bullets
-        if self.rect.right < 0 or self.rect.left > 1280 - 100:
+        if self.rect.right < 0 or self.rect.left > 1280 - 45:
             self.kill()
 
         # #check collision with characters
@@ -166,7 +190,7 @@ class Bullet(pygame.sprite.Sprite):
 #create sprite groups
 bullet_group = pygame.sprite.Group()
 
-enemy = Person('enemy', random.randrange(850, 900), random.randrange(730, 735), 5) 
+enemy = Person('enemy', random.randrange(880, 890), random.randrange(720, 725), 5) 
 player = Person('player', 200, 705, 5)
 
 #create screen 
@@ -174,6 +198,7 @@ status = True
 while (status):
     
     clock.tick(FPS)
+    current_time = pygame.time.get_ticks()
 
     draw_background()
 
@@ -183,10 +208,11 @@ while (status):
 
     enemy.update()
     enemy.draw()
-    #enemy.move(moving_left, moving_right)
+
 
     # update and draw groups
     bullet_group.update()
+    #bullet_group.move(moving_left, moving_right)
     bullet_group.draw(screen)
 
     #update player actions
@@ -194,9 +220,6 @@ while (status):
         #shooting bullets
         if shoot:
             player.shoot()
-            bullet = Bullet(player.rect.x + 370, player.rect.y + 340, player.direction)
-            bullet_group.add(bullet)
-
 
     for i in pygame.event.get():
         if i.type == pygame.QUIT:
@@ -208,15 +231,17 @@ while (status):
                 moving_left = True
             if i.key == pygame.K_d:
                 moving_right = True
+            
             if i.key == pygame.K_SPACE:
                 player.jump = True
+                player.jump_count -= 1 
+
             if i.key == pygame.K_ESCAPE:
                 status = False 
 
             #keyboard input to shoot
             if i.key == pygame.K_r:
                 shoot = True
-                    
             # if i.key == pygame.K_q:
             #     shoot == True
         
@@ -230,6 +255,9 @@ while (status):
             #keyboard release from shoot
             if i.key == pygame.K_r:
                 shoot = False 
+
+                if player.jump_count == 0:
+                        player.jump = False
             # if i.key == pygame.K_q:
             #     shoot == False
 
