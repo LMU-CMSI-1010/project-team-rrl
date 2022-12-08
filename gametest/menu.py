@@ -94,7 +94,7 @@ class MainMenu(Menu):
                 self.game.curr_menu = self.game.creditsMenu
             self.run_display = False
 
-# doesn't actually work 100%, needs some TLC to get the cursor to do its thing    
+# doesn't actually work 100%, needs some TLC to get the cursor to do its thing , quit function doesnt work   
 class quitMenu(Menu):
     def __init__(self, game):
         Menu.__init__(self, game)
