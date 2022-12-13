@@ -26,12 +26,16 @@ max_bullets = 5
 next_bullet_time = 0
 bullet_delta_time = 200 #milliseconds
 
+#music / sound 
+music = pygame.mixer.music.load('background_music.mp3')
+pygame.mixer.music.play(-1) #makes sure it loops
+
 #Define colors
 RED = (255, 0, 0)
 
 #real background and ground
-level_background = pygame.image.load('background.jpeg').convert_alpha()
-level_ground = pygame.image.load('road.png').convert_alpha()
+level_background = pygame.image.load('assets/screens/background.jpeg').convert_alpha()
+level_ground = pygame.image.load('assets/screens/road.png').convert_alpha()
 
 def draw_background():
     screen.blit(level_background, (0,0))
@@ -48,10 +52,10 @@ class Person(pygame.sprite.Sprite):
         self.jumps = 2
         
         if self.character == 'enemy':
-            img = pygame.image.load("enemy_updated.png").convert_alpha()
+            img = pygame.image.load('enemy_updated.png').convert_alpha()
             img = pygame.transform.scale(img, (img.get_width() * 1.8, img.get_height() * 1.8))
         elif self.character == 'player':
-            img = pygame.image.load("player.png").convert_alpha()
+            img = pygame.image.load('assets/characters/player.png').convert_alpha()
             img = pygame.transform.flip(img, True, False)
         
         self.image = pygame.transform.scale(img, (img.get_width() / 5, img.get_height() / 5))
