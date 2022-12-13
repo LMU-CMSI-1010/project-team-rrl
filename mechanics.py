@@ -47,10 +47,10 @@ def runthrough():
             self.jumps = 2
             
             if self.character == 'enemy':
-                img = pygame.image.load("assets/characters/enemy.png").convert_alpha()
+                img = pygame.image.load("assets/characters/new_enemy.png").convert_alpha()
                 img = pygame.transform.scale(img, (img.get_width() * 1.8, img.get_height() * 1.8))
             elif self.character == 'player':
-                img = pygame.image.load("assets/characters/player.png").convert_alpha()
+                img = pygame.image.load("assets/characters/female_character.png").convert_alpha()
                 img = pygame.transform.flip(img, True, False)
             
             self.image = pygame.transform.scale(img, (img.get_width() * 2, img.get_height() * 2))
