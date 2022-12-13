@@ -53,9 +53,11 @@ def runthrough():
                 img = pygame.image.load("assets/characters/player.png").convert_alpha()
                 img = pygame.transform.flip(img, True, False)
             
-            self.image = pygame.transform.scale(img, (img.get_width() / 5, img.get_height() / 5))
+            self.image = pygame.transform.scale(img, (img.get_width() * 2, img.get_height() * 2))
             self.rect = self.image.get_rect()
-            self.rect.center = (x, y)
+            self.rect.x = 600
+            self.rect.y = 832 + 60 
+            print(self.rect.x, self.rect.y)
 
             self.direction = 1
             self.flip = False
@@ -122,7 +124,7 @@ def runthrough():
         def shoot(self):
             # if self.shoot_cooldown == 0:
             #     self.shoot_cooldown == 20
-            bullet = Bullet(self.rect.x + 475, self.rect.y + 340, self .direction)
+            bullet = Bullet(self.rect.x + 495, self.rect.y + 370, self.direction)
             bullet_group.add(bullet)
             #pygame.time.wait(100)
 
@@ -169,42 +171,23 @@ def runthrough():
             self.rect = self.image.get_rect()
             self.rect.center = (x,y)
             self.direction = direction 
-            
+            self.flip = False
+
             #self.direction = 1
-            self.flip = False 
-
+             
             self.image = pygame.transform.scale(bullet_image, (bullet_image.get_width() / 10, bullet_image.get_height() / 10))
-
-        ## added to figure out how bullet can shoot from the left, but idk how LOL
-        def move(self, moving_left, moving_right):
-
-            if self.move(moving_left, moving_right):
-                pass
-
-            # #Resetting the movement variables
-            # dy = 0
-            # dx = 0 
-
-            # #Assigning the movement variables if moving right or left
-            # if moving_left:
-            #     dx = -self.speed
-            #     self.direction = 1
-            #     self.flip = False
-            # if moving_right:
-            #     dx = self.speed
-            #     self.direcion = -1
-            #     self.flip = True
-
-            ##update position
-            # self.rect.x += dx
-            # self.rect.y += dy
         
         def draw(self):
-            screen.blit(pygame.transform.flip(self.image, self.flip, False), self.rect)
+            screen.blit(pygame.transform.flip(self.image, False, False), self.rect)
 
         def update(self):
             #move the bullet
-            self.rect.x += (self.direction * self.speed)
+            if player.flip:
+                self.flip = True
+                self.rect.x += (self.direction * self.speed)
+            elif player.flip == False:
+                self.flip = False
+                self.rect.x -= (self.direction * self.speed)
 
             #check boundaries of bullets
             if self.rect.right < 0 or self.rect.left > 1280 - 45:
@@ -224,8 +207,8 @@ def runthrough():
     bullet_group = pygame.sprite.Group()
 
     # enemy = Person('enemy', random.randrange(880, 890), random.randrange(720, 725), 5) 
-    enemy = Person('enemy', 880, 720, 5) 
-    player = Person('player', 200, 705, 5)
+    enemy = Person('enemy', 600, 832 - 60, 5) 
+    player = Person('player', 200, 832 - 60, 5)
 
     #loading camera in game
     user = player
