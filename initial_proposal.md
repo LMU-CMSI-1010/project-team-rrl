@@ -47,7 +47,7 @@ Possible extensions for the game in future iterations, or if there is enough tim
 ![score screen](https://drive.google.com/uc?id=10pt2IxtRie1w_5M28Q974NmC30yA8wcu)
 
 ### Live Interface Mockups [via Figma]
-[Figma Mockup] (https://www.figma.com/proto/x89mwasuP3EyW35LHXmka1/CS-Final-Mockup?node-id=3%3A39&scaling=scale-down&page-id=0%3A1&starting-point-node-id=3%3A39)
+[Figma Mockup](https://www.figma.com/proto/x89mwasuP3EyW35LHXmka1/CS-Final-Mockup?node-id=3%3A39&scaling=scale-down&page-id=0%3A1&starting-point-node-id=3%3A39)
 
 ## Classes and Objects
 In order to execute our game, we plan on using the following Classes and Objects, as well as including the non-exhaustive list of attributes and methods included:
