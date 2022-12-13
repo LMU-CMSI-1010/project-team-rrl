@@ -123,7 +123,7 @@ class Person(pygame.sprite.Sprite):
     def shoot(self):
         # if self.shoot_cooldown == 0:
         #     self.shoot_cooldown == 20
-        bullet = Bullet(self.rect.x + 475, self.rect.y + 340, self .direction)
+        bullet = Bullet(self.rect.x + 475, self.rect.y + 340, self.direction)
         bullet_group.add(bullet)
         #pygame.time.wait(100)
 
@@ -182,30 +182,16 @@ class Bullet(pygame.sprite.Sprite):
         if self.move(moving_left, moving_right):
             pass
 
-        # #Resetting the movement variables
-        # dy = 0
-        # dx = 0 
-
-        # #Assigning the movement variables if moving right or left
-        # if moving_left:
-        #     dx = -self.speed
-        #     self.direction = 1
-        #     self.flip = False
-        # if moving_right:
-        #     dx = self.speed
-        #     self.direcion = -1
-        #     self.flip = True
-
-        ##update position
-        # self.rect.x += dx
-        # self.rect.y += dy
-    
     def draw(self):
         screen.blit(pygame.transform.flip(self.image, self.flip, False), self.rect)
 
     def update(self):
-        #move the bullet
-        self.rect.x += (self.direction * self.speed)
+        if player.flip == True:
+            #move the bullet
+            self.rect.x += (self.direction * self.speed)
+
+        if player.flip == False:
+            self.rect.x -= (self.direction * self.speed)
 
         #check boundaries of bullets
         if self.rect.right < 0 or self.rect.left > 1280 - 45:
@@ -220,6 +206,32 @@ class Bullet(pygame.sprite.Sprite):
         #     if enemy.alive:
         #         self.kill()    
 
+# #start screen gamestate 
+# gamestate = "startscreen"
+
+# while gamestate == "startscreen":
+#     pass 
+#     #include code for startscreen gamestate
+
+#     for event in pygame.event.get():
+#         if event.type == pygame.QUIT:
+#             pygame.quit()
+#             exit()
+
+#         x,y = pygame.mouse.get_pos() ### this changes startscreen #### changes gamestate super important
+#         if event.type == pygame.MOUSEBUTTONDOWN and 0 < x < 1000 and 0 < y < 800:
+#             gamestate = "play"
+
+#     pygame.display.update()
+#     clock.tick(60)
+
+# while gamestate == "play": #game code #everything that happens within the actual game
+#     pass #creating the enemies, creating the collision , literally everything 
+
+# while gamestate == "endscreen":
+#     pass #code for the end screen, if dead 
+
+
 
 #create sprite groups
 bullet_group = pygame.sprite.Group()
@@ -230,7 +242,7 @@ player = Person('player', 200, 705, 5)
 
 #create screen 
 status = True
-while (status):
+while (status): #change to while gamestate == "play":
     
     clock.tick(FPS)
     current_time = pygame.time.get_ticks()
@@ -255,6 +267,13 @@ while (status):
 
     #bullet_group.move(moving_left, moving_right)
     bullet_group.draw(screen)
+
+    # #collide screen/ end screen 
+    # if enemy.rect.colliderect(player.rect):
+    #     gamestate = "gameover"
+
+    # if bullet.rect.colliderect(enemy.rect):
+    #     gamestate = "gameover"
 
     #update player actions
     if player.alive:
