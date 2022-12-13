@@ -1,14 +1,12 @@
 # CMSI 1010 Final Project Proposal
 
 ## General
----
 - **Project Timeline:** November 10 - December 13
 - **Members:** Raihana Zahra, Rayane Tarazi, Lauren Campbell
 - **Project Name:** shooter!
 - **Project Type:** platform shooter game
 
 ## Description
---- 
 ### 01. Basic Gameplay
 shooter! is a 8-bit platform shooter game where your only goal is to stay alive as long as possible while avoiding obstacles in your journey from one side of the level to the other. If the player is shot by the enemy, they lose the game. If the player makes it to the designated finish line at the end of the level, then they win the game.
 
@@ -30,7 +28,6 @@ Possible extensions for the game in future iterations, or if there is enough tim
 - adding a boss battle at the end of the level
 
 ## Project Timeline
----
 | Week | Goals |  |
 | --- | --- | --- |
 | Week 1 [11/14 → 11/20] | Design screens that the player interacts with (start, end, background) | Design player and enemy sprites |
@@ -40,21 +37,19 @@ Possible extensions for the game in future iterations, or if there is enough tim
 | Week 4.5 [12/12 → 12/13] | Last minute debugging, tidying up the code files, finalizing commented descriptions  | Finalize all code files, documentation, merge all branches, and submit assignment |
 
 ## Interface Mockups
----
 ### Initial Mockup
-! [drawing on board] (https://drive.google.com/uc?id=1NjjyUIOQtT4p2ANM_k7geGEw9jh_6pV4)
+![drawing on board](https://drive.google.com/uc?id=1NjjyUIOQtT4p2ANM_k7geGEw9jh_6pV4)
 
 ### Static Interface Mockups [as of 11/14]
-! [start screen] (https://drive.google.com/uc?id=1gEv6bISxqG_EPsWH5udkH7nWrUr6YSNV)
-! [help screen] (https://drive.google.com/uc?id=1DRYPElpxLMNC__t495gJ6NH7uAGBH1mI)
-! [quit screen] (https://drive.google.com/uc?id=1SEKw4YNJBnkuSBAXlHpNRPUPWr8K_n6m)
-! [score screen] (https://drive.google.com/uc?id=10pt2IxtRie1w_5M28Q974NmC30yA8wcu)
+![start screen](https://drive.google.com/uc?id=1gEv6bISxqG_EPsWH5udkH7nWrUr6YSNV)
+![help screen](https://drive.google.com/uc?id=1DRYPElpxLMNC__t495gJ6NH7uAGBH1mI)
+![quit screen](https://drive.google.com/uc?id=1SEKw4YNJBnkuSBAXlHpNRPUPWr8K_n6m)
+![score screen](https://drive.google.com/uc?id=10pt2IxtRie1w_5M28Q974NmC30yA8wcu)
 
 ### Live Interface Mockups [via Figma]
-<iframe style="border: 1px solid rgba(0, 0, 0, 0.1);" width="800" height="450" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Fproto%2Fx89mwasuP3EyW35LHXmka1%2FCS-Final-Mockup%3Fnode-id%3D3%253A39%26scaling%3Dscale-down%26page-id%3D0%253A1%26starting-point-node-id%3D3%253A39" allowfullscreen></iframe>
+[Figma Mockup] (https://www.figma.com/proto/x89mwasuP3EyW35LHXmka1/CS-Final-Mockup?node-id=3%3A39&scaling=scale-down&page-id=0%3A1&starting-point-node-id=3%3A39)
 
 ## Classes and Objects
----
 In order to execute our game, we plan on using the following Classes and Objects, as well as including the non-exhaustive list of attributes and methods included:
 
 - Class → Weapon
@@ -82,7 +77,6 @@ The relationships between these classes are as follows:
 - Dirt is-a Obstacle
 
 ## Libraries and Execution
---- 
 After careful consideration, we have decided to use the [pygame](https://www.pygame.org/wiki/about) library, and the built in Python graphics library (graphics.py). We will also use some of the built-in Python modules, including `random` and `math`.
 
 The game will be built in Visual Studio Code, and can be played in a pop-up window after being run from the Terminal
