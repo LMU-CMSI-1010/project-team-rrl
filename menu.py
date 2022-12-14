@@ -32,6 +32,7 @@ class MainMenu(Menu):
         self.quitx, self.quity = self.half_w, self.half_h + 90
         self.cursor_rect.midtop = (self.startx + self.offset, self.starty)
     
+    # displays each line of the menu while the game is running but not playing
     def display_menu(self):
         self.run_display = True
         while self.run_display:
@@ -90,7 +91,8 @@ class MainMenu(Menu):
                 self.game.curr_menu = self.game.creditsMenu
             self.run_display = False
 
-# doesn't actually work 100%, needs some TLC to get the cursor to do its thing , quit function doesnt work   
+# doesn't actually work 100%, needs some TLC to get the cursor to do its thing , quit function doesnt work 
+# # shows the quit menu and all the sub-menus under it  
 class quitMenu(Menu):
     def __init__(self, game):
         Menu.__init__(self, game)
@@ -158,6 +160,7 @@ class quitMenu(Menu):
                 self.game.curr_menu = self.game.mainMenu
             # self.run_display = False
     """
+# shows the help menu (which is just a picture)
 class helpMenu(Menu):
     def __init__(self, game):
         Menu.__init__(self, game)
@@ -174,6 +177,7 @@ class helpMenu(Menu):
             pygame.display.flip()
             self.game.window.blit(helpscrn, (0,0))
 
+# shows the credits screen based on the Menu class (another picture) 
 class creditsMenu(Menu):
     def __init__(self, game):
         Menu.__init__(self, game)
