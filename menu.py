@@ -38,6 +38,7 @@ class MainMenu(Menu):
             self.game.checkEvents()
             self.checkInput()
             self.game.display.fill(self.game.black)
+            self.game.drawText("shooter!", 50, self.half_w + 10, self.half_h - 100)
             self.game.drawText("Main Menu", 20, self.half_w, self.half_h - 20)
             self.game.drawText("Start Game", 20, self.startx, self.starty)
             self.game.drawText("Help", 20, self.helpx, self.helpy)
@@ -61,7 +62,7 @@ class MainMenu(Menu):
             elif self.state == "Credits":
                 self.cursor_rect.midtop = (self.startx + self.offset, self.starty)
                 self.state = "Start"
-        elif self.game.up_key:
+        if self.game.up_key:
             if self.state == "Start":
                 self.cursor_rect.midtop = (self.creditsx + self.offset, self.creditsy)
                 self.state = "Credits"
@@ -185,6 +186,6 @@ class creditsMenu(Menu):
                 self.game.curr_menu = self.game.mainMenu
                 self.run_display = False
             self.game.display.fill(self.game.black)
-            creditscrn = pygame.image.load("assets/screens/credits_screen.png").convert()
+            creditscrn = pygame.image.load("gametest/credits_screen.png").convert()
             pygame.display.flip()
             self.game.window.blit(creditscrn, (0,0))
