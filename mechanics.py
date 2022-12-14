@@ -9,6 +9,7 @@ def runthrough():
     screen = pygame.display.set_mode((1280, 832))
     pygame.display.set_caption("shooter!")
 
+    #clock for time
     clock = pygame.time.Clock() 
     FPS = 60 
 
@@ -23,15 +24,10 @@ def runthrough():
     #load image of bullet into game
     bullet_image = pygame.image.load("assets/weapons/bullet.png").convert_alpha()
 
-    #bullets
-    bullets = []
-    max_bullets = 5
-    next_bullet_time = 0
-    bullet_delta_time = 200 #milliseconds
-
     #real background and ground
     level_background = pygame.image.load('assets/screens/background.png').convert_alpha()
 
+    #draws background of screen 
     def draw_background():
         screen.blit(level_background, (0,0))
 
@@ -47,15 +43,17 @@ def runthrough():
             self.jumps = 2
             
             if self.character == 'enemy':
-                img = pygame.image.load("assets/characters/enemy.png").convert_alpha()
+                img = pygame.image.load("assets/characters/new_enemy.png").convert_alpha()
                 img = pygame.transform.scale(img, (img.get_width() * 1.8, img.get_height() * 1.8))
             elif self.character == 'player':
-                img = pygame.image.load("assets/characters/player.png").convert_alpha()
+                img = pygame.image.load("assets/characters/female_character.png").convert_alpha()
                 img = pygame.transform.flip(img, True, False)
             
-            self.image = pygame.transform.scale(img, (img.get_width() / 5, img.get_height() / 5))
+            self.image = pygame.transform.scale(img, (img.get_width() * 2, img.get_height() * 2))
             self.rect = self.image.get_rect()
-            self.rect.center = (x, y)
+            self.rect.x = 600
+            self.rect.y = 832 + 60 
+            print(self.rect.x, self.rect.y)
 
             self.direction = 1
             self.flip = False
@@ -68,7 +66,7 @@ def runthrough():
             self.health = 1
             self.max_health = self.health
             
-            #Enemy specific variables:
+            #enemy specific variables:
             self.move_counter = 0
             self.idling = False
             self.idling_counter = 0 
@@ -81,11 +79,11 @@ def runthrough():
                 self.shoot_cooldown -= 5
 
         def move(self, moving_left, moving_right):
-            #Resetting the movement variables
+            #resetting the movement variables
             dy = 0
             dx = 0 
 
-            #Assigning the movement variables if moving right or left
+            #assigning the movement variables if moving right or left
             if moving_left:
                 dx = -self.speed
                 self.direction = 1
@@ -95,7 +93,7 @@ def runthrough():
                 self.direcion = -1
                 self.flip = True
             
-            #Jump
+            #jumping method for player
             if self.jump and 0 < self.jumps <=2:
                 self.y_vel = -11
                 self.jump = False
@@ -105,27 +103,27 @@ def runthrough():
                 self.jumps = 2
 
                 
-            #Make guy come down with gravity
+            #makes player come down with gravity
             self.y_vel += GRAVITY
             if self.y_vel > 10:
                 self.y_vel 
             dy += self.y_vel
 
-            #Checking with floor
+            #checking collision with floor
             if self.rect.bottom + dy > 832 - 60:
                 dy =  832-60 - self.rect.bottom
 
-            #update position
+            #update player position
             self.rect.x += dx
             self.rect.y += dy
 
+        #method to shoot bullets from player
         def shoot(self):
-            # if self.shoot_cooldown == 0:
-            #     self.shoot_cooldown == 20
-            bullet = Bullet(self.rect.x + 475, self.rect.y + 340, self .direction)
+            bullet = Bullet(self.rect.x + 495, self.rect.y + 370, self.direction)
             bullet_group.add(bullet)
-            #pygame.time.wait(100)
+            pygame.time.wait(100)
 
+        #used for enemy movement
         def ai(self):
             if self.alive and player.alive:
                 if self.idling == False and random.randint(1, 100) == 1:
@@ -150,13 +148,14 @@ def runthrough():
                     if self.idling_counter <= 0:
                         self.idling = False
 
-
+        #checks whether enemy or player is still alive
         def check_alive(self):
             if self.health <= 0:
                 self.health = 0
                 self.speed = 0
                 self.alive = False
         
+        #flips the image of player/enemy if it is turned to the right or left 
         def draw(self):
             screen.blit(pygame.transform.flip(self.image, self.flip, False), self.rect)
 
@@ -169,63 +168,41 @@ def runthrough():
             self.rect = self.image.get_rect()
             self.rect.center = (x,y)
             self.direction = direction 
-            
-            #self.direction = 1
-            self.flip = False 
-
+            self.flip = False
+             
             self.image = pygame.transform.scale(bullet_image, (bullet_image.get_width() / 10, bullet_image.get_height() / 10))
-
-        ## added to figure out how bullet can shoot from the left, but idk how LOL
-        def move(self, moving_left, moving_right):
-
-            if self.move(moving_left, moving_right):
-                pass
-
-            # #Resetting the movement variables
-            # dy = 0
-            # dx = 0 
-
-            # #Assigning the movement variables if moving right or left
-            # if moving_left:
-            #     dx = -self.speed
-            #     self.direction = 1
-            #     self.flip = False
-            # if moving_right:
-            #     dx = self.speed
-            #     self.direcion = -1
-            #     self.flip = True
-
-            ##update position
-            # self.rect.x += dx
-            # self.rect.y += dy
         
         def draw(self):
-            screen.blit(pygame.transform.flip(self.image, self.flip, False), self.rect)
+            screen.blit(pygame.transform.flip(self.image, False, False), self.rect)
 
         def update(self):
-            #move the bullet
-            self.rect.x += (self.direction * self.speed)
+            #moves the bullet in the direction of the player 
+            if player.flip:
+                self.flip = True
+                self.rect.x += (self.direction * self.speed)
+            elif player.flip == False:
+                self.flip = False
+                self.rect.x -= (self.direction * self.speed)
 
             #check boundaries of bullets
             if self.rect.right < 0 or self.rect.left > 1280 - 45:
                 self.kill()
 
-            # #check collision with characters
-    
-            # if pygame.sprite.spritecollide(player, bullet_group, False):
-            #     if player.alive:
-            #         self.kill()
-            # if pygame.sprite.spritecollide(enemy, bullet_group, False):
-            #     if enemy.alive:
-            #         self.kill()    
+            #check collision with characters
+            if pygame.sprite.spritecollide(player, bullet_group, False):
+                if player.alive:
+                    self.kill()
+            if pygame.sprite.spritecollide(enemy, bullet_group, False):
+                if enemy.alive:
+                    self.kill()    
 
 
     #create sprite groups
     bullet_group = pygame.sprite.Group()
 
     # enemy = Person('enemy', random.randrange(880, 890), random.randrange(720, 725), 5) 
-    enemy = Person('enemy', 880, 720, 5) 
-    player = Person('player', 200, 705, 5)
+    enemy = Person('enemy', 600, 832 - 60, 5) 
+    player = Person('player', 200, 832 - 60, 5)
 
     #loading camera in game
     user = player
@@ -238,29 +215,24 @@ def runthrough():
     while (status):
         
         clock.tick(FPS)
-        current_time = pygame.time.get_ticks()
 
         draw_background()
 
         player.update()
         player.draw()
         player.move(moving_left, moving_right)
-
-        # enemy.rect.x = 880
-        enemy.rect.y = 650
+        
         enemy.ai() 
         enemy.update()
         enemy.draw()
 
         # update and draw groups
         bullet_group.update()
-
-        #bullet_group.move(moving_left, moving_right)
         bullet_group.draw(screen)
 
         #update player actions
         if player.alive:
-            #shooting bullets
+            #shoots bullets from player
             if shoot:
                 player.shoot()
 
