@@ -50,6 +50,6 @@ Like any good project, we had our fair share of difficulties throughout the proc
 We all had kind of distinct roles which allowed us to focus on individual topics and problems, but still help each other when we needed it. In terms of dealing with problems, we could explain any issues we had to each other in a rather civil manner. Between all three of us, we were able to moderate and compromise where needed
 | Name | Roles |
 | ---------- | ----------|
-| Raihana Zahra | player movement, bullets, background music  | 
-| Rayane Tarazi | autonomous enemy movement, background, 
-| Lauren Campbell | general graphics, menu screen, game states, looping the main game together with menu screen
+| Raihana Zahra | Person class, player movement, bullets, background music  | 
+| Rayane Tarazi | Person class, autonomous enemy movement, background, collision |
+| Lauren Campbell | general graphics, menu screen, game states, looping the main game together with menu screen |
