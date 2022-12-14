@@ -1,3 +1,8 @@
+"""
+Collaborators: Raihana Zahra, Rayane Tarazi, Lauren Campbell
+About: Attempt to make a scrolling background while the player moves across the screen
+"""
+
 import pygame
 vec = pygame.math.Vector2
 from abc import ABC, abstractmethod
