@@ -1,3 +1,8 @@
+"""
+Collaborators: Raihana Zahra, Rayane Tarazi, Lauren Campbell
+About: File with different menu screens and allows player to interact with them 
+"""
+
 import pygame
 
 # initial menu class with basic functions
