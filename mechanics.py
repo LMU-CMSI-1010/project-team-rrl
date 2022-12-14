@@ -1,4 +1,8 @@
-import pygame, random
+"""
+Collaborators: Raihana Zahra, Rayane Tarazi, Lauren Campbell
+About: File with the two main classes(Bullet and Person) as well as a while loop that is able to run the main game 
+"""
+import pygame, random, gameplay
 import os
 from camera import Camera, Follow
 
@@ -42,9 +46,10 @@ def runthrough():
             self.alive = True
             self.jumps = 2
             
+            #Checks whether to use the enemy image or the player image depending on user input
             if self.character == 'enemy':
                 img = pygame.image.load("assets/characters/new_enemy.png").convert_alpha()
-                img = pygame.transform.scale(img, (img.get_width() * 1.8, img.get_height() * 1.8))
+                img = pygame.transform.scale(img, (img.get_width(), img.get_height()))
             elif self.character == 'player':
                 img = pygame.image.load("assets/characters/female_character.png").convert_alpha()
                 img = pygame.transform.flip(img, True, False)
@@ -53,7 +58,6 @@ def runthrough():
             self.rect = self.image.get_rect()
             self.rect.x = 600
             self.rect.y = 832 + 60 
-            print(self.rect.x, self.rect.y)
 
             self.direction = 1
             self.flip = False
@@ -71,12 +75,9 @@ def runthrough():
             self.idling = False
             self.idling_counter = 0 
 
-
+        #Makes sure the player is alive
         def update(self):
             self.check_alive
-            #update cooldown
-            if self.shoot_cooldown > 0:
-                self.shoot_cooldown -= 5
 
         def move(self, moving_left, moving_right):
             #resetting the movement variables
@@ -160,7 +161,7 @@ def runthrough():
             screen.blit(pygame.transform.flip(self.image, self.flip, False), self.rect)
 
     class Bullet(pygame.sprite.Sprite):
-
+        #Initializes the bullet, giving it an x and y as well as a direction
         def __init__(self, x, y, direction):
             pygame.sprite.Sprite.__init__(self)
             self.speed = 20
@@ -171,9 +172,6 @@ def runthrough():
             self.flip = False
              
             self.image = pygame.transform.scale(bullet_image, (bullet_image.get_width() / 10, bullet_image.get_height() / 10))
-        
-        def draw(self):
-            screen.blit(pygame.transform.flip(self.image, False, False), self.rect)
 
         def update(self):
             #moves the bullet in the direction of the player 
@@ -188,13 +186,13 @@ def runthrough():
             if self.rect.right < 0 or self.rect.left > 1280 - 45:
                 self.kill()
 
-            #check collision with characters
-            if pygame.sprite.spritecollide(player, bullet_group, False):
-                if player.alive:
-                    self.kill()
-            if pygame.sprite.spritecollide(enemy, bullet_group, False):
-                if enemy.alive:
-                    self.kill()    
+            #check collision with characters --> After multiple different attempts we were unable to get the collision to work as a group
+            # if pygame.sprite.spritecollide(player, bullet_group, False):
+            #     if player.alive:
+            #         self.kill()
+            # if pygame.sprite.spritecollide(enemy, bullet_group, False):
+            #     if enemy.alive:
+            #         self.kill()    
 
 
     #create sprite groups
@@ -216,12 +214,15 @@ def runthrough():
         
         clock.tick(FPS)
 
+        #calls draw background function and draws background
         draw_background()
-
+        
+        #Spawns player
         player.update()
         player.draw()
         player.move(moving_left, moving_right)
         
+        #Spawns enemy
         enemy.ai() 
         enemy.update()
         enemy.draw()
@@ -237,6 +238,7 @@ def runthrough():
                 player.shoot()
 
         for i in pygame.event.get():
+            #Checks if the player quites
             if i.type == pygame.QUIT:
                 status = False
             
@@ -250,7 +252,8 @@ def runthrough():
                 if i.key == pygame.K_SPACE or i.key == pygame.K_w:
                     player.jump = True
                     player.jump_count -= 1 
-
+                
+                #Allows the player to also use escape to quit
                 if i.key == pygame.K_ESCAPE:
                     status = False 
 
@@ -271,8 +274,5 @@ def runthrough():
 
                     if player.jump_count == 0:
                             player.jump = False
-            
-        
-        # screen.blit(level_background, (0 - camera.offset.x, 0 - camera.offset.y))
-        # screen.blit(player.image, (player.rect.x - camera.offset.x, player.rect.y - camera.offset.y))
+
         pygame.display.update()
