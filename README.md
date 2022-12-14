@@ -16,4 +16,5 @@ To play the game, download or clone the entire repository to your Desktop. Open 
 
 ## Authors and acknowledgement
 Collaborators: [Raihana Zahra](https://github.com/raihanaza), [Rayane Tarazi](https://github.com/rTarazi1105), and [Lauren Campbell](https://github.com/laurenindira)
+
 Libraries: [pygame](https://www.pygame.org/wiki/about), [random](https://docs.python.org/3/library/random.html?highlight=random#module-random), [abc](https://docs.python.org/3/library/abc.html)
