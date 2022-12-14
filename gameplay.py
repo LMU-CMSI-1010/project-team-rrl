@@ -1,3 +1,7 @@
+"""
+Collaborators: Raihana Zahra, Rayane Tarazi, Lauren Campbell
+About: The file that allows the game to run and change screens
+"""
 import pygame 
 from menu import *
 from mechanics import *
@@ -32,7 +36,6 @@ class Game():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.running = False
-                self.playing = False
                 self.curr_menu.run_display = False
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RETURN:
@@ -62,9 +65,11 @@ class Game():
     # creating game loop given the state change
     def game_loop(self):
         while self.playing:
-            self.checkEvents()
+            self.resetInput()
             if self.start_key:
-                self.playing = False
+                self.curr_menu.run_display = True
+                self.running = False
+            self.checkEvents()
             runthrough()
 
     def music_player(self):
